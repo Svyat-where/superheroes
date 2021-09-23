@@ -13,7 +13,7 @@ composer install
 php artisan migrate
 php artisan migrate:refresh
 
-You should also add to storage/public\images an image(that represents that hero has no image yet, for example, where it is written 'no images yet') for these heroes who will not get any image.
+You should also add to storage/app/public/images an image(that represents that hero has no image yet, for example, where it is written 'no images yet') for these heroes who will not get any image.
 
 php artisan serve - to run the app.
 
