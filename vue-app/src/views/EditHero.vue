@@ -20,12 +20,9 @@
       <label for="">Phrase:</label>
 
       <textarea type="text" name="" id="" value="" v-model="form.phrase" />
-
     </form>
 
-
-
-     <label class="upload">
+    <label class="upload">
       <input
         type="file"
         multiple="multiple"
@@ -34,7 +31,7 @@
       />
       Choose your hero images
     </label>
-     <button type="submit" @click.prevent="editHero">Edit</button>
+    <button type="submit" @click.prevent="editHero">Edit</button>
     <div v-for="(preview, idx) in previews" :key="preview">
       <div>
         <img class="preview" v-bind:ref="'preview' + parseInt(idx)" />
@@ -43,7 +40,11 @@
     </div>
     <ul>
       <li v-for="(image, index) in images" :key="image">
-        <img :src="images[index]" alt="" style="width: 400px; height: 400px; max-height: 50%"/>
+        <img
+          :src="images[index]"
+          alt=""
+          style="width: 400px; height: 400px; max-height: 50%"
+        />
         <button @click="deleteImage(index)">x</button>
       </li>
     </ul>
@@ -92,10 +93,6 @@ export default {
   },
 
   methods: {
-    // imageChange(e) {
-    //   this.files = e.target.files;
-    // },
-
     onFileChange(e) {
       this.files = e.target.files;
       for (let i = 0; i < this.files.length; i++) {
@@ -103,14 +100,14 @@ export default {
       }
 
       for (let i = 0; i < this.previews.length; i++) {
-        let reader = new FileReader(); //instantiate a new file reader
+        let reader = new FileReader();
         reader.addEventListener(
           "load",
           function () {
             this.$refs["preview" + parseInt(i)][0].src = reader.result;
           }.bind(this),
           false
-        ); //add event listener
+        );
 
         reader.readAsDataURL(this.previews[i]);
       }
@@ -126,17 +123,11 @@ export default {
       }
       formData.append("nick_name", this.form.nick_name);
 
-      api
-        .post("/setImages", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((response) => {
-          console.log(response);
-          //this.$router.push({name: 'EditHero', params: {nick_name: this.$route.params.nick_name}})
-        })
-        .catch((error) => console.log(error));
+      api.post("/setImages", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
     },
 
     getImages() {
@@ -174,7 +165,6 @@ export default {
     deleteImage(index) {
       let imageToDelete = this.images[index].split("/").pop();
       this.images.splice(index, 1);
-      console.log(imageToDelete);
       api.delete("/deleteImage", { params: { image: imageToDelete } });
     },
 
@@ -183,8 +173,7 @@ export default {
         .delete("/deleteHero", {
           params: { nick_name: this.$route.params.nick_name },
         })
-        .then((response) => {
-          console.log(response);
+        .then(() => {
           this.$router.push({ name: "Heroes" });
         })
         .catch((error) => console.log(error));
@@ -193,13 +182,15 @@ export default {
 };
 </script>
 <style scoped>
-.container, form {
+.container,
+form {
   margin-left: 350px;
 }
-.container, input, textarea {
-    width:50%;
+.container,
+input,
+textarea {
+  width: 50%;
 }
-
 
 button {
   background-color: #42b983;
@@ -212,25 +203,27 @@ button {
   opacity: 0.6;
   border-radius: 6px;
 }
-button[type=submit] {
-    margin-top:50px;
-    margin-left: 40%;
-    width:50%;
-    margin-bottom: 50px;
+button[type="submit"] {
+  margin-top: 50px;
+  margin-left: 40%;
+  width: 50%;
+  margin-bottom: 50px;
 }
 button:hover {
   opacity: 1;
 }
-ul, img {
-    margin-left: 40%;
+ul,
+img {
+  margin-left: 40%;
 }
 input[type="file"] {
   margin-top: 50px;
   display: none;
 }
-.deleteHero, button {
-    width:50%;
-    margin-left:40%;
+.deleteHero,
+button {
+  width: 50%;
+  margin-left: 40%;
 }
 .upload {
   background-color: #42b983;
@@ -242,9 +235,9 @@ input[type="file"] {
   margin-left: 35%;
 }
 label {
-    color:#42b983;
-    font-style: italic;
-    font-size: 2vh;
+  color: #42b983;
+  font-style: italic;
+  font-size: 2vh;
 }
 input[type="text"],
 textarea {
@@ -262,7 +255,8 @@ textarea {
 textarea {
   resize: none;
 }
-.deleteImg, button {
-    width:10%;
+.deleteImg,
+button {
+  width: 10%;
 }
 </style>

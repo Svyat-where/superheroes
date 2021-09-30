@@ -22,10 +22,11 @@ use App\Http\Controllers\FileController;
 
 Route::get('/getHeroByNick', [HeroController::class, 'getHeroByNick']);
 Route::post('/createHero', [HeroController::class, 'createHero']);
-Route::post('/setImages', [FileController::class, 'setImages']);
-Route::get('/getImages', [FileController::class, 'getImages']);
 Route::put('/editHero', [HeroController::class, 'editHero']);
-Route::delete('/deleteImage', [FileController::class, 'deleteImage']);
 Route::get('/heroList', [HeroController::class, 'heroList']);
 Route::delete('/deleteHero', [HeroController::class, 'deleteHero']);
 Route::get('/show', [HeroController::class, 'show']);
+
+Route::post('/setImages', [FileController::class, 'setImages']);
+Route::get('/getImages', [FileController::class, 'getImages']);
+Route::delete('/deleteImage', [FileController::class, 'deleteImage']);

@@ -1,26 +1,69 @@
 <template>
   <div class="container">
     <form>
-        <p v-if="this.warning != ''" style="color:red; font-size:4vh;">{{this.warning}}</p>
+      <p v-if="this.warning != ''" style="color: red; font-size: 4vh">
+        {{ this.warning }}
+      </p>
       <label for="">Nick Name</label>
 
-      <input type="text" name="" id="" value="" v-model="form.nick_name" v-on:change="hideWarning" placeholder="here must be a nick name" required/>
+      <input
+        type="text"
+        name=""
+        id=""
+        value=""
+        v-model="form.nick_name"
+        v-on:change="hideWarning"
+        placeholder="here must be a nick name"
+        required
+      />
 
       <label for="">Real Name:</label>
 
-      <input type="text" name="" id="" value="" v-model="form.real_name" placeholder="here must be a real name" required/>
+      <input
+        type="text"
+        name=""
+        id=""
+        value=""
+        v-model="form.real_name"
+        placeholder="here must be a real name"
+        required
+      />
 
       <label for="">Description:</label>
 
-      <textarea type="text" name="" id="" value="" v-model="form.description" placeholder="here must be a description" required/>
+      <textarea
+        type="text"
+        name=""
+        id=""
+        value=""
+        v-model="form.description"
+        placeholder="here must be a description"
+        required
+      />
 
       <label for="">Powers:</label>
 
-      <textarea type="text" name="" id="" value="" v-model="form.powers" placeholder="here must be powers" required/>
+      <textarea
+        type="text"
+        name=""
+        id=""
+        value=""
+        v-model="form.powers"
+        placeholder="here must be powers"
+        required
+      />
 
       <label for="">Phrase:</label>
 
-      <textarea type="text" name="" id="" value="" v-model="form.phrase" placeholder="here must be a catch phrase" required/>
+      <textarea
+        type="text"
+        name=""
+        id=""
+        value=""
+        v-model="form.phrase"
+        placeholder="here must be a catch phrase"
+        required
+      />
     </form>
     <label class="upload">
       <input
@@ -64,7 +107,7 @@ export default {
         phrase: "",
       },
       previews: [],
-      warning: '',
+      warning: "",
     };
   },
   methods: {
@@ -72,7 +115,6 @@ export default {
       api
         .post("/createHero", this.form)
         .then(() => {
-
           this.$router.push({
             name: "Hero",
             params: { nick_name: this.form.nick_name },
@@ -80,12 +122,12 @@ export default {
           this.setImages();
         })
         .catch((error) => {
-            if (error.response.status == 404) {
-                console.log(error.response)
-                this.warning = error.response.data;
-            }
-            console.log(error)
-            });
+          if (error.response.status == 404) {
+            console.log(error.response);
+            this.warning = error.response.data;
+          }
+          console.log(error);
+        });
     },
     onFileChange(e) {
       this.files = e.target.files;
@@ -94,14 +136,14 @@ export default {
       }
 
       for (let i = 0; i < this.previews.length; i++) {
-        let reader = new FileReader(); //instantiate a new file reader
+        let reader = new FileReader(); 
         reader.addEventListener(
           "load",
           function () {
             this.$refs["preview" + parseInt(i)][0].src = reader.result;
           }.bind(this),
           false
-        ); //add event listener
+        );
 
         reader.readAsDataURL(this.previews[i]);
       }
@@ -125,24 +167,23 @@ export default {
             "Content-Type": "multipart/form-data",
           },
         })
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => console.log(error));
     },
     hideWarning() {
-        this.warning = '';
-    }
+      this.warning = "";
+    },
   },
 };
 </script>
 
 <style scoped>
-.container, form {
+.container,
+form {
   margin-left: 350px;
 }
-.container, input, textarea {
-    width:50%;
+.container,
+input,
+textarea {
+  width: 50%;
 }
 .createHero {
   margin-top: 100px;
@@ -187,9 +228,9 @@ input[type="file"] {
   margin-left: 35%;
 }
 label {
-    color:#42b983;
-    font-style: italic;
-    font-size: 2vh;
+  color: #42b983;
+  font-style: italic;
+  font-size: 2vh;
 }
 input[type="text"],
 textarea {
@@ -207,13 +248,14 @@ textarea {
 textarea {
   resize: none;
 }
-ul, img {
-    margin-left: 40%;
+ul,
+img {
+  margin-left: 40%;
 }
 input:placeholder-shown {
-    border: 1px solid red; /* Red border only if the input is empty */
+  border: 1px solid red; 
 }
 textarea:placeholder-shown {
-    border: 1px solid red; /* Red border only if the input is empty */
+  border: 1px solid red; 
 }
 </style>
