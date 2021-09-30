@@ -8,10 +8,7 @@ use File;
 
 class ServerFileService implements FileInterface {
 
-    // public function __construct()
-    // {
-    //     $this->hero = new Hero;
-    // }
+
 
     public function setFiles(object $data) 
     {
@@ -26,19 +23,13 @@ class ServerFileService implements FileInterface {
                     'hero_id' => $heroId,
                     'name' => $imageName
                 ]);
-
-                // $images = new Image();
-                // $images->create([
-                //     'hero_id' => $heroId,
-                //     'name' => $imageName
-                // ]);
             }
         } 
     }
 
-    public function getFiles(object $data) 
+    public function getFiles($nick_name) 
     {
-        $hero = Hero::findByNick($data->nick_name);
+        $hero = Hero::findByNick($nick_name);
         $heroId = $hero->id;
         $imagesLength = Image::getQuantityByHeroId($heroId);
         $images = [];
@@ -50,9 +41,9 @@ class ServerFileService implements FileInterface {
         return $images;
     }
 
-    public function deleteFile(object $data) 
+    public function deleteFile(string $imageName) 
     {
-        $imageName = $data->image;
+
         $image = Image::getImageByName($imageName);
         $image->delete();
         File::delete(public_path('images/'.$imageName));

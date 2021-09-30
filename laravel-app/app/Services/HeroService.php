@@ -20,38 +20,38 @@ Class HeroService {
     }
     
 
-    public function createHero(object $data){
+    public function createHero(string $nick_name, string $real_name, $description, string $powers, string $phrase){
         
-        if ($this->hero->findByNick($data->nick_name)) {
-            return response($data->nick_name.' already exists!', 404);
+        if ($this->hero->findByNick($nick_name)) {
+            return response($nick_name.' already exists!', 404);
         }
         Hero::create([
-            'nick_name' => $data->nick_name,
-            'real_name' => $data->real_name,
-            'description' => $data->description,
-            'powers' => $data->powers,
-            'phrase' => $data->phrase,
+            'nick_name' => $nick_name,
+            'real_name' => $real_name,
+            'description' => $description,
+            'powers' => $powers,
+            'phrase' => $phrase,
         ]);
 
-        return $this->hero->findByNick($data->nick_name)->nick_name;
+        return $this->hero->findByNick($nick_name)->nick_name;
     }
 
-    public function editHero(object $data)
+    public function editHero(string $odd_nick_name, string $nick_name, string $real_name, $description, string $powers, string $phrase)
     {
-        $nick = $data->odd_nick_name;
+        $nick = $odd_nick_name;
         $hero = Hero::findByNick($nick);
         
-        $hero->nick_name = $data->nick_name;
-        $hero->real_name = $data->real_name;
-        $hero->description = $data->description;
-        $hero->powers = $data->powers;
-        $hero->phrase = $data->phrase;
+        $hero->nick_name = $nick_name;
+        $hero->real_name = $real_name;
+        $hero->description = $description;
+        $hero->powers = $powers;
+        $hero->phrase = $phrase;
         $hero->save();
     }
 
-    public function deleteHero(object $data)
+    public function deleteHero(string $nick_name)
     {
-        $heroNick = $data->nick_name;
+        $heroNick = $nick_name;
         $hero = Hero::findByNick($heroNick);
         $heroId = $hero->id;
         $images = Image::getImageByHeroId($heroId);

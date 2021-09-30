@@ -25,7 +25,7 @@ class FileController extends Controller
             header('Access-Control-Allow-Methods: *');
             header('Access-Control-Allow-Headers: *');
             
-            //return dd($request->file('files'));
+            return $file->setFile($request);
         }
 
         return response('bad', 404);
@@ -33,11 +33,14 @@ class FileController extends Controller
 
     public function getImages(Request $request)
     {
-        return $this->image->getFiles($request);
+        $nick_name = $request->nick_name;
+
+        return $this->image->getFiles($nick_name);
     }
 
     public function deleteImage(Request $request) 
     {
-        $this->image->deleteFile($request);
+        $imageName = $request->image;
+        $this->image->deleteFile($imageName);
     }
 }

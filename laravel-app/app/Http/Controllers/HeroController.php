@@ -25,25 +25,36 @@ class HeroController extends Controller
 
     public function createHero(Request $request) 
     {
+        $nick_name = $request->nick_name;
+        $real_name = $request->real_name;
+        $description = $request->description;
+        $powers = $request->powers;
+        $phrase = $request->phrase;
 
-        return $this->hero->createHero($request);
-        //return response(200);
+        return $this->hero->createHero($nick_name, $real_name, $description, $powers, $phrase);
     }
 
     public function editHero(Request $request) 
     {
+        $odd_nick_name = $request->odd_nick_name;
+        $nick_name = $request->nick_name;
+        $real_name = $request->real_name;
+        $description = $request->description;
+        $powers = $request->powers;
+        $phrase = $request->phrase;
 
-        $this->hero->editHero($request);
+        $this->hero->editHero($odd_nick_name, $nick_name, $real_name, $description, $powers, $phrase);
     }
 
     public function deleteHero(Request $request)
     {
-        $this->hero->deleteHero($request);
+        $nick_name = $request->nick_name;
+
+        $this->hero->deleteHero($nick_name);
     }
 
     public function heroList(Request $request)
     {
-        // $list = new HeroService();
         return response($this->hero->heroList(), 200);
     }
     public function show(Request $request)
