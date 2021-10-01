@@ -21,7 +21,9 @@ php artisan serve - to run the app.
 Vue-app:
 
 cd vue-app/
+
 npm install
+
 in src/api/api.js change baseURL for Laravel-app API.
 
 npm run serve
