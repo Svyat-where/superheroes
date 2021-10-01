@@ -50,7 +50,7 @@ class HeroController extends Controller
     {
         $nick_name = $request->nick_name;
 
-        $this->hero->deleteHero($nick_name);
+       return $this->hero->deleteHero($nick_name);
     }
 
     public function heroList(Request $request)

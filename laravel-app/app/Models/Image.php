@@ -33,5 +33,9 @@ class Image extends Model
         return self::where('name', $name)->first();
     }
 
+    public  function hero()
+    {
+        return $this->belongsTo('App\Models\Hero');
+    }
     
 }

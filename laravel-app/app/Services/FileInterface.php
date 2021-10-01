@@ -9,4 +9,6 @@ interface FileInterface
     public function setFiles(object $data);
 
     public function deleteFile(string $imageName);
+
+    public function show(array $ids);
 }

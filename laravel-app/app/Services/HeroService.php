@@ -3,15 +3,15 @@
 namespace App\Services;
 
 use App\Models\Hero;
-use App\Models\Image;
-Use File;
+
 
 Class HeroService {
     protected  $hero;
 
-    public function __construct(Hero $hero)
+    public function __construct(Hero $hero, FileInterface $file)
     {
         $this->hero = $hero;
+        $this->file = $file;
     }
 
     public function findAllHeroes() {
@@ -54,12 +54,16 @@ Class HeroService {
         $heroNick = $nick_name;
         $hero = Hero::findByNick($heroNick);
         $heroId = $hero->id;
-        $images = Image::getImageByHeroId($heroId);
 
-        foreach($images as $image) {
-            File::delete(public_path('images/'.$image->name));
-            $image->delete();
+        $images = $this->file->getFiles($heroNick);
+        
+        foreach($images as &$image)
+        {
+            $image = explode('/',$image);
+            $image = end ($image);
+            $this->file->deleteFile($image);
         }
+        $this->file->deleteFolder($heroNick);
 
         $hero->delete();
 
@@ -71,25 +75,15 @@ Class HeroService {
         
         $heroNames = $this->hero->all()->pluck('nick_name');
         $heroIds = Hero::all()->pluck('id');
-        $images = [];
 
-
-
-        foreach($heroIds as $heroId) {
-            array_push($images, asset('images/'.Image::where('hero_id', $heroId)->pluck('name')->first()));
-        }
-
-        for ($i = 0; $i < count($images); $i++) {
-            if ($images[$i] == 'http://127.0.0.1:8000/images') {
-                $images[$i] = 'http://127.0.0.1:8000/images/no-hero.png';
-            }
-        }
-
+        $images = $this->file->show(json_decode($heroIds));
+        
         $list = array();
         foreach($heroNames as $index => $heroName) {
             
             $list[] = ['nick_name' => $heroName, 'image' => $images[$index]];
         }
+
         return $list;
     }
 

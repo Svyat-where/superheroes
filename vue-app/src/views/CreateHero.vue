@@ -115,11 +115,11 @@ export default {
       api
         .post("/createHero", this.form)
         .then(() => {
+          this.setImages();
           this.$router.push({
             name: "Hero",
             params: { nick_name: this.form.nick_name },
           });
-          this.setImages();
         })
         .catch((error) => {
           if (error.response.status == 404) {
