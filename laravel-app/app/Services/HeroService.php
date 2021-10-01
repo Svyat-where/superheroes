@@ -63,7 +63,7 @@ Class HeroService {
             $image = end ($image);
             $this->file->deleteFile($image);
         }
-        $this->file->deleteFolder($heroNick);
+        $this->file->deleteFolder($heroId);
 
         $hero->delete();
 
