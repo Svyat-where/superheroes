@@ -8,8 +8,12 @@ use File;
 
 class ServerFileService implements FileInterface {
 
+    protected $image;
 
-
+    public function __construct(Image $image)
+    {
+        $this->image = $image;
+    }
     public function setFiles(int $id, array $files) 
     {
 
@@ -27,20 +31,21 @@ class ServerFileService implements FileInterface {
 
     public function getFiles(int $id) 
     {
-        $imagesLength = Image::getQuantityByHeroId($id);
-        $images = [];
+        $images = $this->image->where('hero_id', $id)->get();
+        $result = [];
 
-        for($i = 0; $i < $imagesLength; $i++) {
-            array_push($images, asset('images/'.$id.'/'.Image::getImageByHeroId($id)[$i]->name));
+        foreach($images as $image)
+        {
+            array_push($result, asset('images/'.$id.'/'.$image->name));
         }
 
-        return $images;
+        return $result;
     }
 
     public function deleteFile(string $imageName) 
     {
 
-        $image = Image::getImageByName($imageName);
+        $image = $this->image->where('name', $imageName);
         $heroId = $image->hero->id;
         $image->delete();
         File::delete(public_path('images/'.$heroId.'/'.$imageName));
@@ -57,6 +62,7 @@ class ServerFileService implements FileInterface {
     public function show(array $ids)
     {
         $images = [];
+
         foreach($ids as $id) {
             array_push($images, asset('images/'.$id.'/'.Image::where('hero_id', $id)->pluck('name')->first()));
         }
@@ -69,10 +75,8 @@ class ServerFileService implements FileInterface {
                 }
             }
         }
-        
 
         return $images;
-
     }
     
 }
