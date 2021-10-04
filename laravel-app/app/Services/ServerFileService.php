@@ -10,12 +10,11 @@ class ServerFileService implements FileInterface {
 
 
 
-    public function setFiles(int $id, File $files) 
+    public function setFiles(int $id, array $files) 
     {
 
-
-        if ($files->hasfile('files')) {
-            foreach ($files->file('files') as $file) {
+        // if ($files->hasfile('files')) {
+            foreach ($files as $file) {
                 $imageName = $file->getClientOriginalName();
                 $file->move(public_path('images/'.$id), $imageName);
                 Image::create([
@@ -23,7 +22,7 @@ class ServerFileService implements FileInterface {
                     'name' => $imageName
                 ]);
             }
-        } 
+        //} 
     }
 
     public function getFiles(int $id) 

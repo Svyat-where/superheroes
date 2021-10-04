@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\FileRequest;
 use App\Services\FileInterface;
 use App\Models\Image;
 use App\Models\Hero;
@@ -17,11 +18,19 @@ class FileController extends Controller
         $this->image = $file;
     }
 
-    public function setImages(Request $request) 
+    public function setImages(FileRequest $request) 
     {
+        $files = $request->file('files');
         $id = $request->id;
-   
-        return $this->image->setFiles($id, $request);
+
+        if($request->hasfile('files')) {
+            $this->image->setFiles($id, $files);
+
+            return response('Files are setup', 200);
+        } else {
+            return response('No files were sent', 404);
+        }
+    
 
     }
 
