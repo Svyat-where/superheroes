@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Image;
 
 class Hero extends Model
 {
@@ -20,17 +21,11 @@ class Hero extends Model
         'images'
     ];
 
-    public static function findById($id) {
-        
-        return self::where('id', $id)->first();
+    public function images()
+    {
+        return $this->hasMany(Image::class);
     }
 
-
-    public static function findByNick($nick) {
-        
-
-        return self::where('nick_name', $nick)->first();
-    }
-
+    
 
 }

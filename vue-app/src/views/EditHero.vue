@@ -38,7 +38,7 @@
         <button class="deleteImg" @click="deletePreview(idx)">x</button>
       </div>
     </div>
-    <ul>
+    <ul v-if="this.gotImages == true">
       <li v-for="(image, index) in images" :key="image">
         <img
           :src="images[index]"
@@ -61,7 +61,7 @@ export default {
   data() {
     return {
       form: {
-        odd_nick_name: this.$route.params.nick_name,
+        id: '',
         nick_name: this.$route.params.nick_name,
         real_name: "",
         description: "",
@@ -71,23 +71,25 @@ export default {
       files: [],
       images: [],
       previews: [],
+      gotImages: false
     };
   },
 
-  created() {
-    this.getImages();
-  },
+//   updated() {
+//     this.getImages();
+//   },
 
   mounted() {
     api
-      .get("/getHeroByNick", {
-        params: { nick_name: this.$route.params.nick_name },
-      })
+      .get(`/hero/${this.$route.params.nick_name}`)
       .then((response) => {
+        this.form.id = response.data.id;
         this.form.real_name = response.data.real_name;
         this.form.description = response.data.description;
         this.form.powers = response.data.powers;
         this.form.phrase = response.data.phrase;
+        this.getImages();
+        
       })
       .catch((error) => console.log(error));
   },
@@ -121,7 +123,8 @@ export default {
         console.log(file);
         formData.append("files[" + i + "]", file);
       }
-      formData.append("nick_name", this.form.nick_name);
+      formData.append("id", this.form.id);
+      console.log(formData);
 
       api.post("/setImages", formData, {
         headers: {
@@ -133,20 +136,21 @@ export default {
     getImages() {
       api
         .get("/getImages", {
-          params: { nick_name: this.$route.params.nick_name },
+          params: { id: this.form.id },
         })
         .then((response) => {
           console.log("he", response.data[response.data.length - 1]);
           for (let i = 0; i < response.data.length; i++) {
             this.images[i] = response.data[i];
           }
+          this.gotImages = true;
         })
         .catch((error) => console.log(error));
     },
 
     editHero() {
       api
-        .put("/editHero", this.form)
+        .put("/update", this.form)
         .then((response) => {
           this.$router.push({
             name: "Hero",
@@ -170,9 +174,7 @@ export default {
 
     deleteHero() {
       api
-        .delete("/deleteHero", {
-          params: { nick_name: this.$route.params.nick_name },
-        })
+        .delete(`/delete/${this.form.id}`)
         .then(() => {
           this.$router.push({ name: "Heroes" });
         })

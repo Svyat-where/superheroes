@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\HeroRequest;
 use App\Models\Hero;
 use App\Services\HeroService;
 
@@ -14,16 +15,20 @@ class HeroController extends Controller
         $this->hero = $hero;
     }
 
-    public function getHeroByNick(Request $request) 
+    public function show(string $nick_name) 
     {
         
-        $nick = $request->nick_name;
-        $hero = Hero::findByNick($nick);
+        $nick = $nick_name;
+        $hero = $this->hero->show($nick);
 
-        return $hero;
+        if ($hero) {
+            return response($hero, 200);
+        } else {
+            return error('No such hero', 404);
+        }
     }
 
-    public function createHero(Request $request) 
+    public function create(HeroRequest $request) 
     {
         $nick_name = $request->nick_name;
         $real_name = $request->real_name;
@@ -31,34 +36,40 @@ class HeroController extends Controller
         $powers = $request->powers;
         $phrase = $request->phrase;
 
-        return $this->hero->createHero($nick_name, $real_name, $description, $powers, $phrase);
+        $hero = $this->hero->create($nick_name, $real_name, $description, $powers, $phrase);
+         
+        if ($hero) {
+            return response($hero, 200);
+        } else {
+            return error('Some rules are incorrect');
+        }
+        
     }
 
-    public function editHero(Request $request) 
+    public function update(HeroRequest $request) 
     {
-        $odd_nick_name = $request->odd_nick_name;
+        $id = $request->id;
         $nick_name = $request->nick_name;
         $real_name = $request->real_name;
         $description = $request->description;
         $powers = $request->powers;
         $phrase = $request->phrase;
 
-        $this->hero->editHero($odd_nick_name, $nick_name, $real_name, $description, $powers, $phrase);
+        $this->hero->update($id, $nick_name, $real_name, $description, $powers, $phrase);
+
+        return response('Hero has been updated', 200);
+
     }
 
-    public function deleteHero(Request $request)
+    public function delete(int $id)
     {
-        $nick_name = $request->nick_name;
 
-       return $this->hero->deleteHero($nick_name);
+       return $this->hero->delete($id);
     }
 
     public function heroList(Request $request)
     {
         return response($this->hero->heroList(), 200);
     }
-    public function show(Request $request)
-    {
-        return $this->hero->findAllHeroes();
-    }
+
 }

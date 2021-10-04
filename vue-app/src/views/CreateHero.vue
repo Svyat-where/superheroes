@@ -113,13 +113,13 @@ export default {
   methods: {
     createHero() {
       api
-        .post("/createHero", this.form)
+        .post("/create", this.form)
         .then(() => {
-          this.setImages();
           this.$router.push({
             name: "Hero",
             params: { nick_name: this.form.nick_name },
           });
+          this.setImages();
         })
         .catch((error) => {
           if (error.response.status == 404) {
@@ -136,7 +136,7 @@ export default {
       }
 
       for (let i = 0; i < this.previews.length; i++) {
-        let reader = new FileReader(); 
+        let reader = new FileReader();
         reader.addEventListener(
           "load",
           function () {
@@ -161,12 +161,11 @@ export default {
       }
       formData.append("nick_name", this.form.nick_name);
 
-      api
-        .post("/setImages", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
+      api.post("/setImages", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
     },
     hideWarning() {
       this.warning = "";
@@ -253,9 +252,9 @@ img {
   margin-left: 40%;
 }
 input:placeholder-shown {
-  border: 1px solid red; 
+  border: 1px solid red;
 }
 textarea:placeholder-shown {
-  border: 1px solid red; 
+  border: 1px solid red;
 }
 </style>

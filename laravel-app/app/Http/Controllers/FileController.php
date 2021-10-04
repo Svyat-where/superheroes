@@ -19,23 +19,17 @@ class FileController extends Controller
 
     public function setImages(Request $request) 
     {
-        $this->image->setFiles($request);
-        if ($request->hasfile('files')) {
-            header('Access-Control-Allow-Origin: *');
-            header('Access-Control-Allow-Methods: *');
-            header('Access-Control-Allow-Headers: *');
-            
-            return $file->setFile($request);
-        }
+        $id = $request->id;
+   
+        return $this->image->setFiles($id, $request);
 
-        return response('bad', 404);
     }
 
     public function getImages(Request $request)
     {
-        $nick_name = $request->nick_name;
+        $id = $request->id;
 
-        return $this->image->getFiles($nick_name);
+        return $this->image->getFiles($id);
     }
 
     public function deleteImage(Request $request) 

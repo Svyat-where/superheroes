@@ -20,11 +20,11 @@ use App\Http\Controllers\FileController;
 //     return $request->user();
 // });
 
-Route::get('/getHeroByNick', [HeroController::class, 'getHeroByNick']);
-Route::post('/createHero', [HeroController::class, 'createHero']);
-Route::put('/editHero', [HeroController::class, 'editHero']);
+Route::get('/hero/{nick}', [HeroController::class, 'show']);
+Route::post('/create', [HeroController::class, 'create']);
+Route::put('/update', [HeroController::class, 'update']);
 Route::get('/heroList', [HeroController::class, 'heroList']);
-Route::delete('/deleteHero', [HeroController::class, 'deleteHero']);
+Route::delete('/delete/{id}', [HeroController::class, 'delete']);
 Route::get('/show', [HeroController::class, 'show']);
 
 Route::post('/setImages', [FileController::class, 'setImages']);

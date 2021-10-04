@@ -14,7 +14,7 @@
       <button type="button" @click.prevent="edit">Edit</button>
     </div>
 
-    <ul>
+    <ul v-if="this.got == true">
       <li v-for="(image, index) in images" :key="image">
         <img
           :src="images[index]"
@@ -33,27 +33,27 @@ export default {
   name: "Hero",
   data() {
     return {
+      id: '',
       real_name: "",
       description: "",
       powers: "",
       phrase: "",
       data: "",
       images: [],
+      got: false,
     };
   },
-  created() {
-    this.getImages();
-  },
+
   mounted() {
     api
-      .get("/getHeroByNick", {
-        params: { nick_name: this.$route.params.nick_name },
-      })
+      .get(`/hero/${this.$route.params.nick_name}`)
       .then((response) => {
+          this.id = response.data.id;
         this.real_name = response.data.real_name;
         this.description = response.data.description;
         this.powers = response.data.powers;
         this.phrase = response.data.phrase;
+        this.getImages();
       })
       .catch((error) => console.log(error));
   },
@@ -68,12 +68,13 @@ export default {
     getImages() {
       api
         .get("/getImages", {
-          params: { nick_name: this.$route.params.nick_name },
+          params: { id: this.id },
         })
         .then((response) => {
           for (let i = 0; i < response.data.length; i++) {
             this.images[i] = response.data[i];
           }
+          this.got = true;
         })
         .catch((error) => console.log(error));
     },
